@@ -22,12 +22,19 @@ namespace GradeScores
 
             if (string.IsNullOrEmpty(filePath))
             {
-                // Print usage
+                logger.Log("Usage: grade-scores.exe PathToScoresFile");
                 return;
             }
 
-            var runner = new GradeRunner(filePath, new ByHighestScoreGrader());
-            runner.Run();
+            var runner = new GradeRunner(filePath, new ByHighestScoreGrader(), logger);
+            try
+            {
+                runner.Run();
+            }
+            catch (Exception ex)
+            {
+                logger.Log($"Unhandled exception occured. Details: {ex.Message}");
+            }
         }
 
         private static bool InDebugMode()

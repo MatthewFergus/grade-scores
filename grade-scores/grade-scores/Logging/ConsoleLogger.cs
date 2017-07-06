@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GradeScores
 {
-    class ConsoleLogger : ILogger
+    public class ConsoleLogger : ILogger
     {
         public void Log(string message)
         {

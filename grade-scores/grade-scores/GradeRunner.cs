@@ -1,21 +1,23 @@
 ﻿using GradeScores.Model;
+using System.IO;
 
 namespace GradeScores
 {
     public class GradeRunner
     {
-        public GradeRunner(string inputFilePath, IStudentScoreGrader grader)
+        public GradeRunner(string inputFilePath, IStudentScoreGrader grader, ILogger logger)
         {
             _inputFilePath = inputFilePath;
             _grader = grader;
+            _logger = logger;
         }
 
         private readonly string _inputFilePath;
         private readonly IStudentScoreGrader _grader;
+        private readonly ILogger _logger;
 
         public void Run()
         {
-            // try catch. catch domain/io ex separately
             var inputFile = new ScoresFile(_inputFilePath);
             var outputFile = new ScoresFile(ScoresFile.ApplyGradedSuffix(_inputFilePath));
 
@@ -23,9 +25,15 @@ namespace GradeScores
             {
                 inputFile.Read();
             }
-            catch
+            catch (StudentScoreParsingException)
             {
-
+                _logger.Log("Error parsing scores file, check file format.");
+                return;
+            }
+            catch (IOException ex)
+            {
+                _logger.Log($"Error accessing scores file. Details: {ex.Message}");
+                return;
             }
 
             var grader = new ByHighestScoreGrader();
@@ -35,9 +43,9 @@ namespace GradeScores
             {
                 outputFile.Write();
             }
-            catch
+            catch (IOException ex)
             {
-
+                _logger.Log($"Error writing graded scores file. Details: {ex.Message}");
             }
         }
     }

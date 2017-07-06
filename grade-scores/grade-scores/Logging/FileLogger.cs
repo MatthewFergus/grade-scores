@@ -2,7 +2,7 @@
 
 namespace GradeScores
 {
-    class FileLogger : ILogger
+    public class FileLogger : ILogger
     {
         public FileLogger(string directoryPath)
         {

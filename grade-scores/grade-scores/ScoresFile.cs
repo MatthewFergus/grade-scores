@@ -28,24 +28,29 @@ namespace GradeScores
         public void Write()
         {
             //Check scores for null, throw exception
-            File.WriteAllLines(_filePath, Scores.Select(FormatCsvString));
+            File.WriteAllLines(_filePath, Scores.Select(WriteScoreToLine));
         }
 
         private IStudentScore ReadScoreFromLine(string line)
         {
-            try
+            var parts = line.Split(',').Select(p => p.Trim()).ToArray();
+
+            var firstName = parts[0];
+            var surname = parts[1];
+            var scoreParsed = uint.TryParse(parts[2], out var score);
+
+            if (parts.Length != 3
+                || string.IsNullOrEmpty(firstName)
+                || string.IsNullOrEmpty(surname)
+                || !scoreParsed)
             {
-                var parts = line.Split(',').Select(p => p.Trim()).ToArray();
-                return new StudentScore(parts[0], parts[1], uint.Parse(parts[2]));
+                throw new StudentScoreParsingException();
             }
-            catch
-            {
-                // handle with DomainException ie InvalidScoresFileException - pass in innerexception
-                throw;
-            }
+
+            return new StudentScore(firstName, surname, score);
         }
 
-        private static string FormatCsvString(IStudentScore score)
+        private static string WriteScoreToLine(IStudentScore score)
         {
             return $"{score.Surname}, {score.FirstName}, {score.Score}";
         }

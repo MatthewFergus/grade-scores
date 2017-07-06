@@ -18,8 +18,8 @@ namespace GradeScores
 
         public void Run()
         {
-            var inputFile = new ScoresFile(_inputFilePath);
-            var outputFile = new ScoresFile(ScoresFile.ApplyGradedSuffix(_inputFilePath));
+            var inputFile = new ScoresFile(_inputFilePath, new StudentScoreCsvParser());
+            var outputFile = new ScoresFile(ScoresFile.ApplyGradedSuffix(_inputFilePath), new StudentScoreCsvParser());
 
             try
             {

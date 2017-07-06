@@ -7,27 +7,67 @@ using System.Linq;
 
 namespace GradeScoresTests
 {
-    public class StudentScoreGraderTests
+    public class ByHighestScoreGraderTests
     {
         [Fact]
-        public void TestGraderSortsByScoreThenSurnameThenFirstName()
+        public void TestGraderSortsByScoreDescending()
         {
-            IStudentScore[] scores = 
+            IStudentScore[] scores =
                 {
-                    new StudentScore("TED","BUNDY",88),
-                    new StudentScore("ALLAN","SMITH",85),
-                    new StudentScore("MADISON","KING",83),
                     new StudentScore("FRANCIS","SMITH",85),
+                    new StudentScore("CHARLES","KANE",90),
+                    new StudentScore("MADISON","KING",83)
+                };
+
+            IStudentScore[] gradedScores =
+                {
+                    new StudentScore("CHARLES","KANE",90),
+                    new StudentScore("FRANCIS","SMITH",85),
+                    new StudentScore("MADISON","KING",83)
+                };
+
+            var grader = new ByHighestScoreGrader();
+            var graderOutput = grader.Grade(scores);
+            CheckScoresEquivalent(graderOutput, gradedScores).Should().BeTrue();
+        }
+
+        [Fact]
+        public void TestGraderSortsBySurnameAscendingWhenScoreEqual()
+        {
+            IStudentScore[] scores =
+                {
+                    new StudentScore("CHARLES","KANE",83),
+                    new StudentScore("MADISON","AYLER",83),
+                    new StudentScore("TED","BUNDY",83)
+                };
+
+            IStudentScore[] gradedScores =
+                {
+                    new StudentScore("MADISON","AYLER",83),
+                    new StudentScore("TED","BUNDY",83),
                     new StudentScore("CHARLES","KANE",83)
                 };
 
-            IStudentScore[] gradedScores = 
+            var grader = new ByHighestScoreGrader();
+            var graderOutput = grader.Grade(scores);
+            CheckScoresEquivalent(graderOutput, gradedScores).Should().BeTrue();
+        }
+
+        [Fact]
+        public void TestGraderSortsByFirstNameAscendingWhenSurnameAndScoreEqual()
+        {
+            IStudentScore[] scores =
                 {
-                    new StudentScore("TED","BUNDY",88),
-                    new StudentScore("ALLAN","SMITH",85),
                     new StudentScore("FRANCIS","SMITH",85),
-                    new StudentScore("CHARLES","KANE",83),
-                    new StudentScore("MADISON","KING",83)
+                    new StudentScore("ALLAN","SMITH",85),
+                    new StudentScore("CHARLES","SMITH",85)
+                };
+
+            IStudentScore[] gradedScores =
+                {
+                    new StudentScore("ALLAN","SMITH",85),
+                    new StudentScore("CHARLES","SMITH",85),
+                    new StudentScore("FRANCIS","SMITH",85)
                 };
 
             var grader = new ByHighestScoreGrader();
@@ -40,8 +80,8 @@ namespace GradeScoresTests
         {
             IStudentScore[] scores =
                 {
-                    new StudentScore("allan","SMITH",88),
-                    new StudentScore("FRANCIS","SMITH",88)
+                    new StudentScore("FRANCIS","SMITH",88),
+                    new StudentScore("allan","SMITH",88)
                 };
 
             IStudentScore[] gradedScores =
@@ -60,8 +100,8 @@ namespace GradeScoresTests
         {
             IStudentScore[] scores =
                 {
-                    new StudentScore("allan","ayler",88),
-                    new StudentScore("FRANCIS","SMITH",88)
+                    new StudentScore("FRANCIS","SMITH",88),
+                    new StudentScore("allan","ayler",88)
                 };
 
             IStudentScore[] gradedScores =

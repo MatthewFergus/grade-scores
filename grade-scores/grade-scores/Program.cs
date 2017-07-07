@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using GradeScores.Logging;
 
 namespace GradeScores
 {
-    static class Program
+    internal static class Program
     {
         private static void Main(string[] args)
         {
@@ -22,7 +23,7 @@ namespace GradeScores
 
             if (string.IsNullOrEmpty(filePath))
             {
-                logger.Log("Usage: grade-scores.exe PathToScoresFile");
+                logger.Log("Invalid arguments. Usage: grade-scores.exe PathToScoresFile");
                 return;
             }
 
@@ -33,7 +34,7 @@ namespace GradeScores
             }
             catch (Exception ex)
             {
-                logger.Log($"Unhandled exception occured. Details: {ex.Message}");
+                logger.Log("Unhandled exception occured.", ex);
             }
         }
 

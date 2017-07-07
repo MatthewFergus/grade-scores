@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GradeScores
+namespace GradeScores.Logging
 {
-    public class ConsoleLogger : ILogger
+    public class ConsoleLogger : LoggerBase
     {
-        public void Log(string message)
+        public override void Log(string message)
         {
             Console.WriteLine(message);
         }

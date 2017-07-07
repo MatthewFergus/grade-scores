@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GradeScores
+namespace GradeScores.IO
 {
     public class StudentScoreParsingException : Exception
     {

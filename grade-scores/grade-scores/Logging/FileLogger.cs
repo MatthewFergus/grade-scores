@@ -1,23 +1,25 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
-namespace GradeScores
+namespace GradeScores.Logging
 {
-    public class FileLogger : ILogger
+    public class FileLogger : LoggerBase
     {
         public FileLogger(string directoryPath)
         {
-            _filePath = Path.Combine(directoryPath, LogFileName);
+            filePath = Path.Combine(directoryPath, LogFileName);
         }
 
         private const string LogFileName = "grade-scores-log.log";
 
-        private string _filePath;
+        private readonly string filePath;
 
-        public void Log(string message)
+        public override void Log(string message)
         {
-            using (FileStream fs = new FileStream(_filePath, FileMode.Append, FileAccess.Write))
-            using (StreamWriter writer = new StreamWriter(fs))
+            using (var fs = new FileStream(filePath, FileMode.Append, FileAccess.Write))
+            using (var writer = new StreamWriter(fs))
             {
+                writer.WriteLine(DateTime.Now);
                 writer.WriteLine(message);
             }
         }

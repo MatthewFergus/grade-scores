@@ -28,7 +28,7 @@ namespace GradeScoresTests
 
             var grader = new ByHighestScoreGrader();
             var graderOutput = grader.Grade(scores);
-            CheckScoresEquivalent(graderOutput, gradedScores).Should().BeTrue();
+            CheckScoresEquivalent(graderOutput, gradedScores);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace GradeScoresTests
 
             var grader = new ByHighestScoreGrader();
             var graderOutput = grader.Grade(scores);
-            CheckScoresEquivalent(graderOutput, gradedScores).Should().BeTrue();
+            CheckScoresEquivalent(graderOutput, gradedScores);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace GradeScoresTests
 
             var grader = new ByHighestScoreGrader();
             var graderOutput = grader.Grade(scores);
-            CheckScoresEquivalent(graderOutput, gradedScores).Should().BeTrue();
+            CheckScoresEquivalent(graderOutput, gradedScores);
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace GradeScoresTests
 
             var grader = new ByHighestScoreGrader();
             var graderOutput = grader.Grade(scores);
-            CheckScoresEquivalent(graderOutput, gradedScores).Should().BeTrue();
+            CheckScoresEquivalent(graderOutput, gradedScores);
         }
 
         [Fact]
@@ -112,37 +112,23 @@ namespace GradeScoresTests
 
             var grader = new ByHighestScoreGrader();
             var graderOutput = grader.Grade(scores);
-            CheckScoresEquivalent(graderOutput, gradedScores).Should().BeTrue();
+            CheckScoresEquivalent(graderOutput, gradedScores);
         }
 
-        /// <summary>
-        /// Returns true if scores and otherScores contain equivalent IStudentScore objects in the same order
-        /// </summary>
-        private bool CheckScoresEquivalent(IEnumerable<IStudentScore> scores, IEnumerable<IStudentScore> otherScores)
+        private static void CheckScoresEquivalent(IEnumerable<IStudentScore> scores, IEnumerable<IStudentScore> otherScores)
         {
             var scoresArray = scores.ToArray();
             var otherScoresArray = otherScores.ToArray();
 
-            if (scoresArray.Length != otherScoresArray.Length)
-            {
-                return false;
-            }
+            scoresArray.Length.Should().Be(otherScoresArray.Length);
 
             var index = 0;
             foreach (var score in scoresArray)
             {
                 var otherScore = otherScoresArray[index];
-                if (score.Score != otherScore.Score
-                    || !string.Equals(score.FirstName, otherScore.FirstName)
-                    || !string.Equals(score.Surname, otherScore.Surname))
-                {
-                    return false;
-                }
-
+                score.ShouldBeEquivalentTo(otherScore);
                 index++;
             }
-
-            return true;
         }
     }
 }

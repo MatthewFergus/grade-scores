@@ -1,8 +1,8 @@
 ﻿using GradeScores.Model;
 
-namespace GradeScores
+namespace GradeScores.IO
 {
-    public interface IScoreParser
+    public interface IStudentScoreParser
     {
         IStudentScore ReadScoreFromLine(string line);
 

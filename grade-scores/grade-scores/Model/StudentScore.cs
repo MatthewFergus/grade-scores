@@ -1,5 +1,3 @@
-using System;
-
 namespace GradeScores.Model
 {
     public class StudentScore : IStudentScore

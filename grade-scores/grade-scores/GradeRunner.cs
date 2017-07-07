@@ -1,5 +1,6 @@
-﻿using GradeScores.Model;
-using System.IO;
+﻿using System.IO;
+using GradeScores.IO;
+using GradeScores.Logging;
 
 namespace GradeScores
 {
@@ -7,19 +8,19 @@ namespace GradeScores
     {
         public GradeRunner(string inputFilePath, IStudentScoreGrader grader, ILogger logger)
         {
-            _inputFilePath = inputFilePath;
-            _grader = grader;
-            _logger = logger;
+            this.inputFilePath = inputFilePath;
+            this.grader = grader;
+            this.logger = logger;
         }
 
-        private readonly string _inputFilePath;
-        private readonly IStudentScoreGrader _grader;
-        private readonly ILogger _logger;
+        private readonly string inputFilePath;
+        private readonly IStudentScoreGrader grader;
+        private readonly ILogger logger;
 
         public void Run()
         {
-            var inputFile = new ScoresFile(_inputFilePath, new StudentScoreCsvParser());
-            var outputFile = new ScoresFile(ScoresFile.ApplyGradedSuffix(_inputFilePath), new StudentScoreCsvParser());
+            var inputFile = new ScoresFile(inputFilePath, new StudentScoreCsvParser());
+            var outputFile = new ScoresFile(ScoresFile.ApplyGradedSuffix(inputFilePath), new StudentScoreCsvParser());
 
             try
             {
@@ -27,16 +28,15 @@ namespace GradeScores
             }
             catch (StudentScoreParsingException)
             {
-                _logger.Log("Error parsing scores file, check file format.");
+                logger.Log("Error parsing scores file, check file format.");
                 return;
             }
             catch (IOException ex)
             {
-                _logger.Log($"Error accessing scores file. Details: {ex.Message}");
+                logger.Log("Error accessing scores file.", ex);
                 return;
             }
-
-            var grader = new ByHighestScoreGrader();
+            
             outputFile.Scores = grader.Grade(inputFile.Scores);
 
             try
@@ -45,7 +45,7 @@ namespace GradeScores
             }
             catch (IOException ex)
             {
-                _logger.Log($"Error writing graded scores file. Details: {ex.Message}");
+                logger.Log("Error writing graded scores file", ex);
             }
         }
     }

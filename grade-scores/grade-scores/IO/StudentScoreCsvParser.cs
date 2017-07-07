@@ -1,21 +1,24 @@
-﻿using System;
+﻿using System.Linq;
 using GradeScores.Model;
-using System.Linq;
 
-namespace GradeScores
+namespace GradeScores.IO
 {
-    class StudentScoreCsvParser : IScoreParser
+    public class StudentScoreCsvParser : IStudentScoreParser
     {
         public IStudentScore ReadScoreFromLine(string line)
         {
-            var parts = line.Split(',').Select(p => p.Trim()).ToArray();
+            var parts = line?.Split(',').Select(p => p.Trim()).ToArray();
+
+            if (parts == null || parts.Length != 3)
+            {
+                throw new StudentScoreParsingException();
+            }
 
             var firstName = parts[0];
             var surname = parts[1];
             var scoreParsed = uint.TryParse(parts[2], out var score);
 
-            if (parts.Length != 3
-                || string.IsNullOrEmpty(firstName)
+            if (string.IsNullOrEmpty(firstName)
                 || string.IsNullOrEmpty(surname)
                 || !scoreParsed)
             {

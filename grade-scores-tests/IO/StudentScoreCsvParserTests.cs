@@ -4,10 +4,12 @@ using FluentAssertions;
 using GradeScores.IO;
 using GradeScores.Model;
 
-namespace GradeScoresTests
+namespace GradeScoresTests.IO
 {
     public class StudentScoreCsvParserTests
     {
+        private static readonly IStudentScore testScore = new StudentScore("CHARLES", "KANE", 50);
+
         [Theory]
         [InlineData("CHARLES,KANE,50")]
         public void TestRead(string input)
@@ -16,9 +18,7 @@ namespace GradeScoresTests
 
             var score = parser.ReadScoreFromLine(input);
 
-            score.Score.Should().Be(50);
-            score.FirstName.Should().Be("CHARLES");
-            score.Surname.Should().Be("KANE");
+            score.ShouldBeEquivalentTo(testScore);
         }
 
         [Theory]
@@ -29,9 +29,7 @@ namespace GradeScoresTests
 
             var score = parser.ReadScoreFromLine(input);
 
-            score.Score.Should().Be(50);
-            score.FirstName.Should().Be("CHARLES");
-            score.Surname.Should().Be("KANE");
+            score.ShouldBeEquivalentTo(testScore);
         }
 
         [Theory]
@@ -53,10 +51,9 @@ namespace GradeScoresTests
         [Fact]
         public void TestWrite()
         {
-            var score = new StudentScore("CHARLES", "KANE", 50);
             var parser = new StudentScoreCsvParser();
 
-            parser.WriteScoreToLine(score).Should().Be("KANE, CHARLES, 50");
+            parser.WriteScoreToLine(testScore).Should().Be("KANE, CHARLES, 50");
         }
     }
 }

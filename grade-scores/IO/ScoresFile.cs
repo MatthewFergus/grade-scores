@@ -35,7 +35,8 @@ namespace GradeScores.IO
 
         public static string ApplyGradedSuffix(string path)
         {
-            return path.Remove(path.LastIndexOf('.')) + GradedSuffix;
+            var removeIndex = path.LastIndexOf('.');
+            return removeIndex == -1 ? path + GradedSuffix : path.Remove(removeIndex) + GradedSuffix;
         }
     }
 }

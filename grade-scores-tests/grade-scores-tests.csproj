@@ -61,7 +61,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StudentScoreCsvParserTests.cs" />
+    <Compile Include="IO\ScoresFileTests.cs" />
+    <Compile Include="IO\StudentScoreCsvParserTests.cs" />
     <Compile Include="StudentScoreGraderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

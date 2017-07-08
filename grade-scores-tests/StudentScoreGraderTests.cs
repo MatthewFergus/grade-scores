@@ -115,18 +115,18 @@ namespace GradeScoresTests
             CheckScoresEquivalent(graderOutput, gradedScores);
         }
 
-        private static void CheckScoresEquivalent(IEnumerable<IStudentScore> scores, IEnumerable<IStudentScore> otherScores)
+        private static void CheckScoresEquivalent(IEnumerable<IStudentScore> graderScores, IEnumerable<IStudentScore> correctScores)
         {
-            var scoresArray = scores.ToArray();
-            var otherScoresArray = otherScores.ToArray();
+            var graderArray = graderScores.ToArray();
+            var correctArray = correctScores.ToArray();
 
-            scoresArray.Length.Should().Be(otherScoresArray.Length);
+            graderArray.Length.Should().Be(correctArray.Length);
 
             var index = 0;
-            foreach (var score in scoresArray)
+            foreach (var graderScore in graderArray)
             {
-                var otherScore = otherScoresArray[index];
-                score.ShouldBeEquivalentTo(otherScore);
+                var correctScore = correctArray[index];
+                graderScore.ShouldBeEquivalentTo(correctScore);
                 index++;
             }
         }
